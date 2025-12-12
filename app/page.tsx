@@ -1,5 +1,7 @@
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
+import ProjectCard from '@/components/ProjectCard';
+import { projects } from '@/lib/projects'
 
 export default function Home() {
   return (
@@ -36,11 +38,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Project section -placeholder */}
+      {/* Projects Section - NOW WITH REAL CONTENT */}
       <section id="projects" className="bg-white py-20">
         <div className="max-w-6xl mx-auto px-4">
-          <h3 className="text-3xl font-bold text-slate-900 mb-6">Featured Projects</h3>
-          <p className="text-slate-600">Architecture diagrams and project showcases coming soon...</p>
+          <h3 className="text-3xl font-bold text-slate-900 mb-4 text-center">Featured Projects</h3>
+          <p className="text-slate-600 text-center mb-12 max-w-2xl mx-auto">
+            Showcasing scalable systems, AI integration, and performance optimization across cloud and HPC domains.
+          </p>
+
+          {/* Project Cards Grid */}
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {projects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
         </div>
       </section>
 
