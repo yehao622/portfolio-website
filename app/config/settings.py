@@ -2,7 +2,8 @@
 Application configuration and settings management.
 """
 from pydantic_settings import BaseSettings
-from typing import Optional
+from pydantic import field_validator
+from typing import List, Union
 
 
 class Settings(BaseSettings):
@@ -18,12 +19,16 @@ class Settings(BaseSettings):
     port: int = 8000
     
     # ==================== CORS Configuration ====================
-    allowed_origins: list[str] = [
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "https://portfolio-website-*.vercel.app",
-        "https://your-domain.com"
-    ]
+    allowed_origins: Union[List[str], str] = "http://localhost:3000,http://127.0.0.1:3000"
+    
+    @field_validator('allowed_origins', mode='before')
+    @classmethod
+    def parse_cors_origins(cls, v):
+        """Parse CORS origins from string or list."""
+        if isinstance(v, str):
+            # Split comma-separated string
+            return [origin.strip() for origin in v.split(',') if origin.strip()]
+        return v
     
     # ==================== Database Configuration ====================
     database_url: str = "postgresql://user:password@localhost:5432/portfolio_db"

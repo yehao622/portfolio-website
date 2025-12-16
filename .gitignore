@@ -43,6 +43,7 @@ next-env.d.ts
 # Python
 __pycache__/
   *.pyc
+__ini__.py
 venv/
 .venv/
    

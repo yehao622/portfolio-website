@@ -4,11 +4,16 @@ Database setup and models for visitor tracking.
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import NullPool
 from datetime import datetime
 from app.config.settings import settings
 
 # Create database engine
-engine = create_engine(settings.database_url, echo=settings.debug)
+engine = create_engine(
+    settings.database_url,
+    echo=settings.debug,
+    poolclass=NullPool,
+)
 
 # Create session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
