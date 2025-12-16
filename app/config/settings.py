@@ -37,8 +37,8 @@ class Settings(BaseSettings):
     #anthropic_api_key: str = ""
     #anthropic_model: str = "claude-sonnet-4-20250514"
     ai_provider: str = "gemini"  # or "anthropic" if you switch back
-    gemini_api_key: str = "AIzaSyBOoFEEQeUD7mKxbuTEe7-KZlhLiUB-7t4"
-    gemini_model: str = "gemini-1.5-pro"  # Free tier model
+    gemini_api_key: str = ""
+    gemini_model: str = "gemini-2.5-flash"  # Free tier model
     max_tokens: int = 2048  # Gemini calls this "max_output_tokens"
     temperature: float = 0.7
     
