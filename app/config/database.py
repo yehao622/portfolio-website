@@ -9,8 +9,10 @@ from datetime import datetime
 from app.config.settings import settings
 
 # Create database engine
+DATABASE_URL = settings.database_url.replace("postgresql://", "postgresql+psycopg://", 1)
+
 engine = create_engine(
-    settings.database_url,
+    DATABASE_URL,
     echo=settings.debug,
     poolclass=NullPool,
 )
