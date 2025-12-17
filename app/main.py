@@ -11,7 +11,7 @@ from contextlib import asynccontextmanager
 import logging
 
 from app.config.settings import settings
-from app.config.database import init_db
+# from app.config.database import init_db
 from app.routers.chat import router as chat_router
 from app.routers.analytics import router as analytics_router
 from app.routers import resume
