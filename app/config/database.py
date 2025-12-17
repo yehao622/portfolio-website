@@ -9,11 +9,11 @@ from datetime import datetime
 from app.config.settings import settings
 
 # Create database engine
-#DATABASE_URL = settings.database_url.replace("postgresql://", "postgresql+psycopg2://", 1)
+DATABASE_URL = settings.database_url.replace("postgresql://", "postgresql+psycopg2://", 1)
 
 # Psycopg3 uses 'postgresql://' directly (no need to change to postgresql+psycopg2://)
 # SQLAlchemy 2.x automatically uses psycopg3 if 'psycopg' package is installed
-DATABASE_URL = settings.database_url
+# DATABASE_URL = settings.database_url
 
 # For local development without database, use SQLite
 if not DATABASE_URL or DATABASE_URL == "":
