@@ -1,0 +1,12 @@
+# Block all bots from accessing resume
+User-agent: *
+Disallow: /api/resume/
+Disallow: /*.pdf
+
+# Allow access to main pages
+Allow: /
+Allow: /#projects
+Allow: /#about
+
+# Sitemap (for SEO of main pages)
+Sitemap: https://howardye.com/sitemap.xml

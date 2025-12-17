@@ -3,7 +3,10 @@ Main FastAPI application for Howard's Portfolio Backend.
 """
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse  # ← Add this import
+from fastapi.responses import JSONResponse
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 from contextlib import asynccontextmanager
 import logging
 
@@ -11,6 +14,7 @@ from app.config.settings import settings
 from app.config.database import init_db
 from app.routers.chat import router as chat_router
 from app.routers.analytics import router as analytics_router
+from app.routers import resume
 from app.models.schemas import HealthCheck, HealthStatus
 
 # Configure logging
@@ -19,6 +23,9 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# Create rate limiter instance
+limiter = Limiter(key_func=get_remote_address)
 
 
 @asynccontextmanager
@@ -51,6 +58,10 @@ app = FastAPI(
     redoc_url="/redoc" if settings.debug else None
 )
 
+# Add rate limit exception handler
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
@@ -63,6 +74,7 @@ app.add_middleware(
 # Include routers
 app.include_router(chat_router)
 app.include_router(analytics_router)
+app.include_router(resume.router)
 
 
 # ==================== Root Endpoints ====================
@@ -84,40 +96,43 @@ async def root():
     }
 
 
-@app.get("/health", response_model=HealthCheck)
+# @app.get("/health", response_model=HealthCheck)
+# async def health_check():
+#     """
+#     Health check endpoint for monitoring.
+#     Tests database and AI service connectivity.
+#     """
+#     try:
+#         # Check database connection
+#         from app.config.database import engine
+#         from sqlalchemy import text
+#         with engine.connect() as conn:
+#             conn.execute(text("SELECT 1"))
+#         db_healthy = True
+#     except Exception as e:
+#         logger.error(f"Database health check failed: {e}")
+#         db_healthy = False
+    
+#     # Check AI service (basic check - just verify we have API key)
+#     ai_healthy = bool(settings.gemini_api_key)
+    
+#     # Determine overall status
+#     if db_healthy and ai_healthy:
+#         status = HealthStatus.HEALTHY
+#     elif db_healthy or ai_healthy:
+#         status = HealthStatus.DEGRADED
+#     else:
+#         status = HealthStatus.UNHEALTHY
+    
+#     return HealthCheck(
+#         status=status,
+#         database=db_healthy,
+#         ai_service=ai_healthy,
+#         version=settings.app_version
+#     )
+@app.get("/health")
 async def health_check():
-    """
-    Health check endpoint for monitoring.
-    Tests database and AI service connectivity.
-    """
-    try:
-        # Check database connection
-        from app.config.database import engine
-        from sqlalchemy import text
-        with engine.connect() as conn:
-            conn.execute(text("SELECT 1"))
-        db_healthy = True
-    except Exception as e:
-        logger.error(f"Database health check failed: {e}")
-        db_healthy = False
-    
-    # Check AI service (basic check - just verify we have API key)
-    ai_healthy = bool(settings.gemini_api_key)
-    
-    # Determine overall status
-    if db_healthy and ai_healthy:
-        status = HealthStatus.HEALTHY
-    elif db_healthy or ai_healthy:
-        status = HealthStatus.DEGRADED
-    else:
-        status = HealthStatus.UNHEALTHY
-    
-    return HealthCheck(
-        status=status,
-        database=db_healthy,
-        ai_service=ai_healthy,
-        version=settings.app_version
-    )
+    return {"status": "healthy", "service": "portfolio-api"}
 
 
 # ==================== Error Handlers ====================

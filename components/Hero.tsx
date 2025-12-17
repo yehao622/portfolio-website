@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Button from './Button';
+import SecureDownloadButton from './SecureDownloadButton';
 
 export default function Hero() {
     return (
@@ -66,13 +67,16 @@ export default function Hero() {
                 </div>
 
                 {/* CTA Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+                {/* <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
                     <Button variant="primary" href="/Howardye.pdf">
                         Download My Resume
                     </Button>
                     <Button variant="secondary" href="#projects">
                         View Projects
                     </Button>
+                </div> */}
+                <div className="mb-8">
+                    <SecureDownloadButton />
                 </div>
 
                 {/* Visitor Counter */}
