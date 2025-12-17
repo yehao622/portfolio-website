@@ -98,43 +98,48 @@ async def root():
     }
 
 
-@app.get("/health", response_model=HealthCheck)
-async def health_check():
-    """
-    Health check endpoint for monitoring.
-    Tests database and AI service connectivity.
-    """
-    try:
-        # Check database connection
-        from app.config.database import engine
-        from sqlalchemy import text
-        with engine.connect() as conn:
-            conn.execute(text("SELECT 1"))
-        db_healthy = True
-    except Exception as e:
-        logger.error(f"Database health check failed: {e}")
-        db_healthy = False
-    
-    # Check AI service (basic check - just verify we have API key)
-    ai_healthy = bool(settings.gemini_api_key)
-    
-    # Determine overall status
-    if db_healthy and ai_healthy:
-        status = HealthStatus.HEALTHY
-    elif db_healthy or ai_healthy:
-        status = HealthStatus.DEGRADED
-    else:
-        status = HealthStatus.UNHEALTHY
-    
-    return HealthCheck(
-        status=status,
-        database=db_healthy,
-        ai_service=ai_healthy,
-        version=settings.app_version,
-    )
-# @app.get("/health")
+# @app.get("/health", response_model=HealthCheck)
 # async def health_check():
-#     return {"status": "healthy", "service": "portfolio-api"}
+#     """
+#     Health check endpoint for monitoring.
+#     Tests database and AI service connectivity.
+#     """
+#     try:
+#         # Check database connection
+#         from app.config.database import engine
+#         from sqlalchemy import text
+#         with engine.connect() as conn:
+#             conn.execute(text("SELECT 1"))
+#         db_healthy = True
+#     except Exception as e:
+#         logger.error(f"Database health check failed: {e}")
+#         db_healthy = False
+    
+#     # Check AI service (basic check - just verify we have API key)
+#     ai_healthy = bool(settings.gemini_api_key)
+    
+#     # Determine overall status
+#     if db_healthy and ai_healthy:
+#         status = HealthStatus.HEALTHY
+#     elif db_healthy or ai_healthy:
+#         status = HealthStatus.DEGRADED
+#     else:
+#         status = HealthStatus.UNHEALTHY
+    
+#     return HealthCheck(
+#         status=status,
+#         database=db_healthy,
+#         ai_service=ai_healthy,
+#         version=settings.app_version,
+#     )
+@app.get("/health")
+async def health_check():
+    return {
+        "status": "healthy",
+        "service": "portfolio-api",
+        "version": "1.0.0",
+        "cors_origins": settings.allowed_origins  # Include for debugging
+    }
 
 
 # ==================== Error Handlers ====================
