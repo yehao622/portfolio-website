@@ -131,7 +131,6 @@ async def health_check():
         database=db_healthy,
         ai_service=ai_healthy,
         version=settings.app_version,
-        cors_origins=settings.allowed_origins
     )
 # @app.get("/health")
 # async def health_check():
