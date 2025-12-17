@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     
     # ==================== CORS Configuration ====================
     # allowed_origins: Union[List[str], str] = "http://localhost:3000,http://127.0.0.1:3000"
-    allowed_origins: List[str] = ["http://localhost:3000,http://127.0.0.1:3000"]
+    allowed_origins: List[str] = ["http://localhost:3000","http://127.0.0.1:3000"]
     
     @field_validator('allowed_origins', mode='before')
     @classmethod
