@@ -89,7 +89,9 @@ async def root():
         "documentation": "/docs" if settings.debug else "Contact admin for API docs",
         "endpoints": {
             "health": "/health",
+            "docs": "/docs",
             "chat": "/api/chat",
+            "resume": "/api/resume/preview",
             "examples": "/api/chat/examples",
             "analytics": "/api/analytics/stats"
         }

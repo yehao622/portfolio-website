@@ -2,10 +2,12 @@
 Database initialization script.
 Run this to create all necessary tables.
 """
-import sys
+import sys, os
 from app.config.database import init_db, engine
 from sqlalchemy import text
 
+# Add the app directory to Python path
+sys.path.insert(0, os.path.dirname(__file__))
 
 def main():
     """Initialize database with all tables."""
@@ -22,14 +24,14 @@ def main():
         print("✓ Database tables created successfully")
         
         # Verify tables were created
-        with engine.connect() as conn:
-            result = conn.execute(text("""
-                SELECT table_name 
-                FROM information_schema.tables 
-                WHERE table_schema = 'public'
-            """))
-            tables = [row[0] for row in result]
-            print(f"✓ Created tables: {', '.join(tables)}")
+        # with engine.connect() as conn:
+        #     result = conn.execute(text("""
+        #         SELECT table_name 
+        #         FROM information_schema.tables 
+        #         WHERE table_schema = 'public'
+        #     """))
+        #     tables = [row[0] for row in result]
+        #     print(f"✓ Created tables: {', '.join(tables)}")
         
         print("\n✅ Database initialization complete!")
         return 0
