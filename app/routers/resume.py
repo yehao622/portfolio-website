@@ -104,10 +104,13 @@ async def preview_resume():
     """
     Return resume info without downloading (for SEO/preview).
     """
+    file_exists = os.path.exists(RESUME_PATH)
+
     return {
-        "available": True,
+        "available": file_exists,
         "filename": "Howard_Ye_Resume.pdf",
         "description": "Computer Engineering graduate student (MS) seeking DevOps, Full Stack, Cloud, and System Performance Engineering roles",
         "updated": "December 2025",
-        "download_info": "Click 'Download Resume' button on the homepage to access"
+        "download_info": "Click 'Download Resume' button on the homepage to access",
+        "contact": "hyedailyuse@gmail.com"
     }
