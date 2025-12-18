@@ -67,7 +67,7 @@ export default function SecureDownloadButton() {
                 })
             }).catch(err => console.error('Analytics failed:', err));
 
-        } catch (error) {
+        } catch (error: any) {
             console.error('Download error:', error);
             setErrorMessage(error.message || 'An unexpected error occurred');
         } finally {
