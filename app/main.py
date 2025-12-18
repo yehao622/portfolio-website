@@ -62,6 +62,9 @@ app = FastAPI(
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
+# Get parsed origins list
+allowed_origins = settings.get_allowed_origins()
+
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,

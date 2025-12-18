@@ -1,7 +1,7 @@
 """
 Application configuration and settings management.
 """
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import field_validator
 from typing import List, Union
 
@@ -9,10 +9,18 @@ from typing import List, Union
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
     
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=False,
+        extra="ignore"
+    )
+
     # ==================== API Configuration ====================
     app_name: str = "Portfolio AI Agent API"
     app_version: str = "1.0.0"
     debug: bool = False
+    environment: str = "production"
     
     # ==================== Server Configuration ====================
     host: str = "0.0.0.0"
@@ -20,19 +28,31 @@ class Settings(BaseSettings):
     
     # ==================== CORS Configuration ====================
     # allowed_origins: Union[List[str], str] = "http://localhost:3000,http://127.0.0.1:3000"
-    allowed_origins: List[str] = ["http://localhost:3000"]
+    allowed_origins_str: str = "http://localhost:3000,http://127.0.0.1:3000"
     
-    @field_validator('allowed_origins', mode='before')
-    @classmethod
-    def parse_cors_origins(cls, v):
-        """Parse CORS origins from string or list."""
-        if isinstance(v, str):
-            # Split comma-separated string
-            return [origin.strip() for origin in v.split(',') if origin.strip()]
-        return v
+    @computed_field  # type: ignore
+    @property
+    def allowed_origins(self) -> List[str]:
+        """Parse comma-separated ALLOWED_ORIGINS string into list."""
+        if not self.allowed_origins_str:
+            return ["http://localhost:3000"]
+        
+        # Split by comma and strip whitespace
+        origins = [origin.strip() for origin in self.allowed_origins_str.split(",") if origin.strip()]
+        print(f"🔧 Parsed ALLOWED_ORIGINS: {origins}")
+        return origins
+
+    # @field_validator('allowed_origins', mode='before')
+    # @classmethod
+    # def parse_cors_origins(cls, v):
+    #     """Parse CORS origins from string or list."""
+    #     if isinstance(v, str):
+    #         # Split comma-separated string
+    #         return [origin.strip() for origin in v.split(',') if origin.strip()]
+    #     return v
     
     # ==================== Database Configuration ====================
-    database_url: str = "postgresql://user:password@localhost:5432/portfolio_db"
+    database_url: str = ""
     
     # ==================== GEmini/Anthropic API Configuration ====================
     #anthropic_api_key: str = ""
@@ -54,8 +74,13 @@ class Settings(BaseSettings):
     rate_limit_per_minute: int = 10
     
     class Config:
-        env_file = ".env"
-        case_sensitive = False
+        fields = {
+            'allowed_origins_str': {
+                'env': 'ALLOWED_ORIGINS'
+            }
+        }
+        # env_file = ".env"
+        # case_sensitive = False
 
 
 # ==================== Global Settings Instance ====================
