@@ -28,24 +28,24 @@ class Settings(BaseSettings):
     
     # ==================== CORS Configuration ====================
     # allowed_origins: Union[List[str], str] = "http://localhost:3000,http://127.0.0.1:3000"
-    allowed_origins: str = "http://localhost:3000"
+    # allowed_origins: str = "http://localhost:3000"
     cors_origins: list[str] = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "https://howardye.up.railway.app"
     ]
     
-    def get_allowed_origins(self) -> List[str]:
-        """Parse comma-separated ALLOWED_ORIGINS string into list."""
-        print(f"🔍 RAW allowed_origins value: '{self.allowed_origins}'")
-        print(f"🔍 Type: {type(self.allowed_origins)}")
+    # def get_allowed_origins(self) -> List[str]:
+    #     """Parse comma-separated ALLOWED_ORIGINS string into list."""
+    #     print(f"🔍 RAW allowed_origins value: '{self.allowed_origins}'")
+    #     print(f"🔍 Type: {type(self.allowed_origins)}")
         
-        if not self.allowed_origins:
-            return ["http://localhost:3000"]
+    #     if not self.allowed_origins:
+    #         return ["http://localhost:3000"]
         
-        # Split by comma and strip whitespace
-        origins = [origin.strip() for origin in self.allowed_origins.split(",") if origin.strip()]
-        return origins
+    #     # Split by comma and strip whitespace
+    #     origins = [origin.strip() for origin in self.allowed_origins.split(",") if origin.strip()]
+    #     return origins
 
     # @field_validator('allowed_origins', mode='before')
     # @classmethod
