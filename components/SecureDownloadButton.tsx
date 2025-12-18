@@ -17,7 +17,7 @@ export default function SecureDownloadButton() {
 
         try {
             // Generate time-based token (expires in 1 hour)
-            const token = btoa(Date.now().toString()).slice(0, 12);
+            const token = btoa(Date.now().toString());//.slice(0, 12);
 
             // Use environment-aware URL
             const downloadUrl = `${API_ENDPOINTS.resumeDownload}?token=${token}`;
@@ -25,9 +25,11 @@ export default function SecureDownloadButton() {
             // Call backend API (with token)
             const response = await fetch(
                 downloadUrl,
-                // `https://howardye.up.railway.app/api/resume/download?token=${token}`,
                 {
                     method: 'GET',
+                    headers: {
+                        'Accept': 'application/pdf',
+                    }
                 }
             );
 
