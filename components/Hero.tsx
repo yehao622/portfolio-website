@@ -81,7 +81,7 @@ export default function Hero() {
 
                 {/* Visitor Counter */}
                 <div className="text-sm text-slate-500">
-                    👁️ Visitors: <span className="font-semibold">0</span>
+                    👁️ Visitors: <span className="font-semibold">0 (To be deployed)</span>
                 </div>
             </div>
         </section>
