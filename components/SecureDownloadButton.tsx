@@ -20,7 +20,8 @@ export default function SecureDownloadButton() {
             const token = btoa(Date.now().toString());//.slice(0, 12);
 
             // Use environment-aware URL
-            const downloadUrl = `${API_ENDPOINTS.resumeDownload}?token=${token}`;
+            // const downloadUrl = `${API_ENDPOINTS.resumeDownload}?token=${token}`;
+            const downloadUrl = `${API_ENDPOINTS.resumeDownload}?token=${encodeURIComponent(token)}`;
 
             // Call backend API (with token)
             const response = await fetch(

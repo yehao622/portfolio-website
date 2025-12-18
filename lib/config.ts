@@ -7,9 +7,14 @@
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 // API Base URL
-export const API_BASE_URL = isDevelopment
-    ? 'http://localhost:8000'  // Local development
-    : 'https://howardye.up.railway.app';  // Production (Railway)
+export const API_BASE_URL =
+    // Check if we have a specific override (useful for local testing against prod)
+    process.env.NEXT_PUBLIC_API_URL ||
+    (isDevelopment
+        ? 'https://howardye.up.railway.app' // CHANGED: Use Railway even in dev for now
+        // OR keep it flexible: 
+        // ? 'http://localhost:8000' 
+        : 'https://howardye.up.railway.app');
 
 // Helper function to build API URLs
 export function getApiUrl(endpoint: string): string {
