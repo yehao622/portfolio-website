@@ -28,18 +28,15 @@ class Settings(BaseSettings):
     
     # ==================== CORS Configuration ====================
     # allowed_origins: Union[List[str], str] = "http://localhost:3000,http://127.0.0.1:3000"
-    allowed_origins_str: str = "http://localhost:3000,http://127.0.0.1:3000"
+    allowed_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
     
-    @computed_field  # type: ignore
-    @property
-    def allowed_origins(self) -> List[str]:
+    def get_allowed_origins(self) -> List[str]:
         """Parse comma-separated ALLOWED_ORIGINS string into list."""
-        if not self.allowed_origins_str:
+        if not self.allowed_origins:
             return ["http://localhost:3000"]
         
         # Split by comma and strip whitespace
-        origins = [origin.strip() for origin in self.allowed_origins_str.split(",") if origin.strip()]
-        print(f"🔧 Parsed ALLOWED_ORIGINS: {origins}")
+        origins = [origin.strip() for origin in self.allowed_origins.split(",") if origin.strip()]
         return origins
 
     # @field_validator('allowed_origins', mode='before')
@@ -73,14 +70,9 @@ class Settings(BaseSettings):
     # ==================== Rate Limiting ====================
     rate_limit_per_minute: int = 10
     
-    class Config:
-        fields = {
-            'allowed_origins_str': {
-                'env': 'ALLOWED_ORIGINS'
-            }
-        }
-        # env_file = ".env"
-        # case_sensitive = False
+    # class Config:
+    #     env_file = ".env"
+    #     case_sensitive = False
 
 
 # ==================== Global Settings Instance ====================
