@@ -1,7 +1,8 @@
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import ProjectCard from '@/components/ProjectCard';
-import { projects } from '@/lib/projects'
+import AIChat from '@/components/AIChat';
+import { projects } from '@/lib/projects';
 
 export default function Home() {
   return (
@@ -88,6 +89,9 @@ export default function Home() {
           <p>© 2025 Howard(Hao) Ye. Built with Next.js, TypeScript, and Tailwind CSS.</p>
         </div>
       </footer>
+
+      {/* AI Chat Floating Button */}
+      <AIChat />
     </main>
   );
 }
