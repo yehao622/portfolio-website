@@ -1,7 +1,7 @@
 """
 Resume download router with anti-crawler protection.
 """
-from fastapi import APIRouter, HTTPException, Request, Response
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import FileResponse
 from slowapi import Limiter
 from slowapi.util import get_remote_address
@@ -41,7 +41,7 @@ def validate_token(token: str) -> bool:
 
 
 @router.get("/download")
-@limiter.limit("3/hour")  # Max 3 downloads per hour per IP
+@limiter.limit("20/hour")  # Max 20 downloads per hour per IP
 async def download_resume(
     token: str,
     request: Request
@@ -65,11 +65,11 @@ async def download_resume(
     # Check 2: Basic user agent validation
     user_agent = request.headers.get('user-agent', '').lower()
     bot_keywords = ['bot', 'crawler', 'spider', 'scraper', 'curl', 'wget']
-    if any(keyword in user_agent for keyword in bot_keywords):
-        raise HTTPException(
-            status_code=403,
-            detail="Automated access not allowed. Please use a web browser."
-        )
+    # if any(keyword in user_agent for keyword in bot_keywords):
+    #     raise HTTPException(
+    #         status_code=403,
+    #         detail="Automated access not allowed. Please use a web browser."
+    #     )
     
     # Check 3: Verify file exists
     if not os.path.exists(RESUME_PATH):

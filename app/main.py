@@ -1,7 +1,7 @@
 """
 Main FastAPI application for Howard's Portfolio Backend.
 """
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -72,7 +72,7 @@ allowed_origins = [
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.allowed_origins,
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -150,6 +150,47 @@ async def health_check():
 
 
 # ==================== Error Handlers ====================
+# Custom exception handler that includes CORS headers
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
+    """Handle rate limit exceeded with CORS headers."""
+    response = JSONResponse(
+        status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+        content={"detail": "Rate limit exceeded. Please try again later."},
+    )
+    # Add CORS headers
+    origin = request.headers.get("origin")
+    if origin in allowed_origins:
+        response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+    return response
+
+# Custom exception handler for all HTTP exceptions
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    """Handle all exceptions with CORS headers."""
+    from fastapi.exceptions import HTTPException
+    
+    if isinstance(exc, HTTPException):
+        response = JSONResponse(
+            status_code=exc.status_code,
+            content={"detail": exc.detail},
+        )
+    else:
+        response = JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"detail": "Internal server error"},
+        )
+    
+    # Add CORS headers to error responses
+    origin = request.headers.get("origin")
+    if origin in allowed_origins:
+        response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        response.headers["Access-Control-Allow-Methods"] = "DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT"
+        response.headers["Access-Control-Allow-Headers"] = "*"
+    
+    return response
 
 @app.exception_handler(404)
 async def not_found_handler(request, exc):
