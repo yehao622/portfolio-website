@@ -63,7 +63,11 @@ app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Get parsed origins list
-allowed_origins = settings.get_allowed_origins()
+allowed_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://smart-home-energy-demo.vercel.app"
+]
 
 # Configure CORS
 app.add_middleware(
@@ -141,7 +145,7 @@ async def health_check():
         "status": "healthy",
         "service": "portfolio-api",
         "version": "1.0.0",
-        "cors_origins": settings.allowed_origins  # Include for debugging
+        "cors_origins": allowed_origins  # Include for debugging
     }
 
 

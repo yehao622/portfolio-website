@@ -28,10 +28,13 @@ class Settings(BaseSettings):
     
     # ==================== CORS Configuration ====================
     # allowed_origins: Union[List[str], str] = "http://localhost:3000,http://127.0.0.1:3000"
-    allowed_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
+    allowed_origins: str = "http://localhost:3000"
     
     def get_allowed_origins(self) -> List[str]:
         """Parse comma-separated ALLOWED_ORIGINS string into list."""
+        print(f"🔍 RAW allowed_origins value: '{self.allowed_origins}'")
+        print(f"🔍 Type: {type(self.allowed_origins)}")
+        
         if not self.allowed_origins:
             return ["http://localhost:3000"]
         
