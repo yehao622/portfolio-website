@@ -35,7 +35,7 @@ def validate_token(token: str) -> bool:
         time_diff = current_time - token_time
         
         # Token valid if less than 1 hour old
-        return 0 <= time_diff <= 3600000
+        return -120000 <= time_diff <= 3600000
         
     except Exception:
         return False
