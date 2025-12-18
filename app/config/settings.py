@@ -29,6 +29,11 @@ class Settings(BaseSettings):
     # ==================== CORS Configuration ====================
     # allowed_origins: Union[List[str], str] = "http://localhost:3000,http://127.0.0.1:3000"
     allowed_origins: str = "http://localhost:3000"
+    cors_origins: list[str] = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://howardye.up.railway.app"
+    ]
     
     def get_allowed_origins(self) -> List[str]:
         """Parse comma-separated ALLOWED_ORIGINS string into list."""

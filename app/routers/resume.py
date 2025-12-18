@@ -42,7 +42,7 @@ def validate_token(token: str) -> bool:
 
 
 @router.get("/download")
-@limiter.limit("20/hour")  # Max 20 downloads per hour per IP
+@limiter.limit("5/hour")  # Max 5 downloads per hour per IP
 async def download_resume(
     token: str,
     request: Request
@@ -65,7 +65,7 @@ async def download_resume(
     
     # Check 2: Basic user agent validation
     user_agent = request.headers.get('user-agent', '').lower()
-    bot_keywords = ['bot', 'crawler', 'spider', 'scraper', 'curl', 'wget']
+    bot_keywords = ['bot', 'crawler', 'spider', 'scraper', 'curl', 'wget', 'python-requests']
     if any(keyword in user_agent for keyword in bot_keywords):
         raise HTTPException(
             status_code=403,

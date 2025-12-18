@@ -6,8 +6,11 @@ import { API_ENDPOINTS } from '@/lib/config';
 export default function SecureDownloadButton() {
     const [isVerified, setIsVerified] = useState(false);
     const [isDownloading, setIsDownloading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const handleDownload = async () => {
+        setErrorMessage(null); // Clear previous errors
+
         if (!isVerified) {
             alert('Please verify you are a recruiter first');
             return;
@@ -20,7 +23,6 @@ export default function SecureDownloadButton() {
             const token = btoa(Date.now().toString());//.slice(0, 12);
 
             // Use environment-aware URL
-            // const downloadUrl = `${API_ENDPOINTS.resumeDownload}?token=${token}`;
             const downloadUrl = `${API_ENDPOINTS.resumeDownload}?token=${encodeURIComponent(token)}`;
 
             // Call backend API (with token)
@@ -35,9 +37,9 @@ export default function SecureDownloadButton() {
             );
 
             if (!response.ok) {
-                const errorText = await response.text();
-                console.error('❌ Download failed:', response.status, errorText);
-                throw new Error(`Download failed: ${response.status}`);
+                if (response.status === 403) throw new Error("Session expired. Please refresh the page.");
+                if (response.status === 429) throw new Error("Too many downloads. Please wait.");
+                throw new Error("Download failed. Please try again.");
             }
 
             // Get the blob
@@ -67,7 +69,7 @@ export default function SecureDownloadButton() {
 
         } catch (error) {
             console.error('Download error:', error);
-            alert('Download failed. Please try again or contact me directly.');
+            setErrorMessage(error.message || 'An unexpected error occurred');
         } finally {
             setIsDownloading(false);
         }
@@ -80,7 +82,10 @@ export default function SecureDownloadButton() {
                 <input
                     type="checkbox"
                     checked={isVerified}
-                    onChange={(e) => setIsVerified(e.target.checked)}
+                    onChange={(e) => {
+                        setIsVerified(e.target.checked);
+                        if (e.target.checked) setErrorMessage(null);
+                    }}
                     className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
                 />
                 <span>I'm a recruiter or hiring manager</span>
@@ -97,7 +102,7 @@ export default function SecureDownloadButton() {
                         ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl cursor-pointer'
                         : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     }
-        `}
+                `}
                 aria-label="Download resume"
             >
                 {isDownloading ? (
@@ -117,6 +122,13 @@ export default function SecureDownloadButton() {
                     </>
                 )}
             </button>
+
+            {/* OPTIMIZATION: Display Error Message Here */}
+            {errorMessage && (
+                <p className="text-sm text-red-500 font-medium animate-pulse">
+                    {errorMessage}
+                </p>
+            )}
 
             {/* Privacy Notice */}
             <p className="text-xs text-slate-500 text-center max-w-sm">

@@ -72,7 +72,7 @@ allowed_origins = [
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
+    allow_origins=settings.cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -146,7 +146,7 @@ async def health_check():
         "status": "healthy",
         "service": "portfolio-api",
         "version": "1.0.0",
-        "cors_origins": allowed_origins  # Include for debugging
+        "cors_origins": settings.cors_origins  # Include for debugging
     }
 
 
@@ -161,7 +161,7 @@ async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
     )
     # Add CORS headers
     origin = request.headers.get("origin")
-    if origin in allowed_origins:
+    if origin in settings.cors_origins:
         response.headers["Access-Control-Allow-Origin"] = origin
         response.headers["Access-Control-Allow-Credentials"] = "true"
     return response
@@ -185,7 +185,7 @@ async def general_exception_handler(request: Request, exc: Exception):
     
     # Add CORS headers to error responses
     origin = request.headers.get("origin")
-    if origin in allowed_origins:
+    if origin in settings.cors_origins:
         response.headers["Access-Control-Allow-Origin"] = origin
         response.headers["Access-Control-Allow-Credentials"] = "true"
         response.headers["Access-Control-Allow-Methods"] = "DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT"
