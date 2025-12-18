@@ -145,7 +145,7 @@ export default function AIChat() {
             {/* Chat Badge - shows when closed */}
             {!isOpen && (
                 <div className="fixed bottom-20 right-6 bg-slate-800 text-white text-xs px-3 py-1 rounded-full shadow-md z-40 animate-pulse">
-                    Ask me anything!
+                    Ask me anything about Howard Ye!
                 </div>
             )}
 
@@ -174,8 +174,8 @@ export default function AIChat() {
                             >
                                 <div
                                     className={`max-w-[80%] px-4 py-2 rounded-2xl ${message.role === 'user'
-                                            ? 'bg-blue-600 text-white rounded-br-md'
-                                            : 'bg-white text-slate-800 shadow-sm border border-slate-200 rounded-bl-md'
+                                        ? 'bg-blue-600 text-white rounded-br-md'
+                                        : 'bg-white text-slate-800 shadow-sm border border-slate-200 rounded-bl-md'
                                         }`}
                                 >
                                     <p className="text-sm whitespace-pre-wrap">{message.content}</p>
