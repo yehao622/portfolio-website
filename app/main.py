@@ -66,7 +66,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 allowed_origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "https://smart-home-energy-demo.vercel.app"
+    "https://howardye.up.railway.app"
 ]
 
 # Configure CORS
