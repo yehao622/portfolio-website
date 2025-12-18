@@ -33,29 +33,8 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "https://howardye.up.railway.app",
-        "https://portfolio-website-sigma-six-85.vercel.app"
+        "https://howardye.vercel.app"
     ]
-    
-    # def get_allowed_origins(self) -> List[str]:
-    #     """Parse comma-separated ALLOWED_ORIGINS string into list."""
-    #     print(f"🔍 RAW allowed_origins value: '{self.allowed_origins}'")
-    #     print(f"🔍 Type: {type(self.allowed_origins)}")
-        
-    #     if not self.allowed_origins:
-    #         return ["http://localhost:3000"]
-        
-    #     # Split by comma and strip whitespace
-    #     origins = [origin.strip() for origin in self.allowed_origins.split(",") if origin.strip()]
-    #     return origins
-
-    # @field_validator('allowed_origins', mode='before')
-    # @classmethod
-    # def parse_cors_origins(cls, v):
-    #     """Parse CORS origins from string or list."""
-    #     if isinstance(v, str):
-    #         # Split comma-separated string
-    #         return [origin.strip() for origin in v.split(',') if origin.strip()]
-    #     return v
     
     # ==================== Database Configuration ====================
     database_url: str = ""
@@ -78,10 +57,6 @@ class Settings(BaseSettings):
     
     # ==================== Rate Limiting ====================
     rate_limit_per_minute: int = 10
-    
-    # class Config:
-    #     env_file = ".env"
-    #     case_sensitive = False
 
 
 # ==================== Global Settings Instance ====================
