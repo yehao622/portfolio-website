@@ -66,11 +66,11 @@ async def download_resume(
     # Check 2: Basic user agent validation
     user_agent = request.headers.get('user-agent', '').lower()
     bot_keywords = ['bot', 'crawler', 'spider', 'scraper', 'curl', 'wget']
-    # if any(keyword in user_agent for keyword in bot_keywords):
-    #     raise HTTPException(
-    #         status_code=403,
-    #         detail="Automated access not allowed. Please use a web browser."
-    #     )
+    if any(keyword in user_agent for keyword in bot_keywords):
+        raise HTTPException(
+            status_code=403,
+            detail="Automated access not allowed. Please use a web browser."
+        )
     
     # Check 3: Verify file exists
     if not os.path.exists(RESUME_PATH):
