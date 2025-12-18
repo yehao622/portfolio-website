@@ -25,14 +25,10 @@ def validate_token(token: str) -> bool:
     Token format: base64(timestamp)
     """
     try:
-        parts = token.split('_')
-        if len(parts) != 2:
-            print(f"❌ Invalid token format: {token}")
-            return False
         # Decode token to get timestamp
-        # decoded = base64.b64decode(token + '==')  # Add padding
-        # token_time = int(decoded.decode('utf-8'))
-        token_time = int(parts[0])
+        decoded_bytes = base64.b64decode(token)
+        token_time_str = decoded_bytes.decode('utf-8')
+        token_time = int(token_time_str)
         
         # Check if token is within 1 hour (3600000 ms)
         current_time = int(datetime.now().timestamp() * 1000)

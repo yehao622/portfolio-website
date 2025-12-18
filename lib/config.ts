@@ -7,7 +7,7 @@
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 // API Base URL
-export const API_BASE_URL = !isDevelopment
+export const API_BASE_URL = isDevelopment
     ? 'http://localhost:8000'  // Local development
     : 'https://howardye.up.railway.app';  // Production (Railway)
 
