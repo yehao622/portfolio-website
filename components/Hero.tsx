@@ -1,8 +1,47 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Button from './Button';
 import SecureDownloadButton from './SecureDownloadButton';
 
 export default function Hero() {
+    const [visitorCount, setVisitorCount] = useState<number | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // Define API URL
+        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
+        const initVisit = async () => {
+            try {
+                // 1. Record the visit
+                // We use a simple POST request. You can expand the body if needed.
+                await fetch(`${API_URL}/api/analytics/visit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        page_visited: window.location.pathname,
+                        user_agent: navigator.userAgent
+                    }),
+                });
+
+                // 2. Fetch the updated stats
+                const response = await fetch(`${API_URL}/api/analytics/stats`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setVisitorCount(data.total_visits);
+                }
+            } catch (error) {
+                console.error('Error fetching visitor count:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        initVisit();
+    }, []);
+
     return (
         <section className="max-w-6xl mx-auto px-4 py-20">
             <div className="text-center">
@@ -66,22 +105,23 @@ export default function Hero() {
                     </a>
                 </div>
 
-                {/* CTA Buttons */}
-                {/* <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                    <Button variant="primary" href="/Howardye.pdf">
-                        Download My Resume
-                    </Button>
-                    <Button variant="secondary" href="#projects">
-                        View Projects
-                    </Button>
-                </div> */}
                 <div className="mb-8">
                     <SecureDownloadButton />
                 </div>
 
                 {/* Visitor Counter */}
-                <div className="text-sm text-slate-500">
+                {/* <div className="text-sm text-slate-500">
                     👁️ Visitors: <span className="font-semibold">0 (To be deployed)</span>
+                </div> */}
+                <div className="text-sm text-slate-500 flex items-center justify-center gap-2">
+                    <span>👁️ Visitors:</span>
+                    <span className="font-semibold min-w-[20px] text-center">
+                        {loading ? (
+                            <span className="animate-pulse">...</span>
+                        ) : (
+                            visitorCount !== null ? visitorCount.toLocaleString() : 'N/A'
+                        )}
+                    </span>
                 </div>
             </div>
         </section>
