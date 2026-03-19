@@ -14,11 +14,11 @@ alembic>=1.13.1
 google-generativeai==0.8.3
 
 # LangChain (optional, for future expansion)
-langchain==0.3.7
-langchain-community==0.3.5
+#langchain==0.3.7
+#langchain-community==0.3.5
 
 # Vector Store (for future Phase 2)
-chromadb==0.5.20
+# chromadb==0.5.20
 
 # Environment and Config
 python-dotenv==1.0.1
