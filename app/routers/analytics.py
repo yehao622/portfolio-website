@@ -7,7 +7,7 @@ from sqlalchemy import func
 from datetime import datetime, timedelta
 import hashlib
 
-from app.config.database import get_db, Visitor
+from app.config.database import get_db, Visitor, DB_AVAILABLE
 from app.models.schemas import VisitorCreate, VisitorStats
 
 router = APIRouter(prefix="/api/analytics", tags=["analytics"])
@@ -35,6 +35,9 @@ async def record_visit(
     Returns:
         Success confirmation
     """
+    if not DB_AVAILABLE or db is None:
+        return {"success": False, "message": "Analytics database not configured"}
+
     try:
         # Get client IP and hash it for privacy
         client_ip = request.client.host
@@ -71,6 +74,9 @@ async def get_visitor_stats(db: Session = Depends(get_db)):
     Returns:
         VisitorStats with total and recent visitor counts
     """
+    if not DB_AVAILABLE or db is None:
+        return VisitorStats(total_visitors=0, total_visits=0, recent_visits=0)
+
     try:
         # Total unique visitors (unique IP hashes)
         total_visitors = db.query(func.count(func.distinct(Visitor.ip_hash))).scalar()
@@ -109,6 +115,9 @@ async def get_recent_visits(limit: int = 10, db: Session = Depends(get_db)):
     Returns:
         List of recent visits
     """
+    if not DB_AVAILABLE or db is None:
+        return {"visits": [], "message": "Analytics database not configured"}
+
     try:
         visits = db.query(Visitor).order_by(
             Visitor.visit_date.desc()

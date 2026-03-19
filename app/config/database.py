@@ -10,16 +10,25 @@ from app.config.settings import settings
 
 # Create database engine
 raw_url = settings.database_url
-if raw_url.startswith("postgresql://"):
-    DATABASE_URL = raw_url.replace("postgresql://", "postgresql+psycopg://", 1)
-else:
-    DATABASE_URL = raw_url
+DB_AVAILABLE = bool(raw_url and raw_url.strip())
 
-engine = create_engine(
-    DATABASE_URL,
-    echo=settings.debug,
-    poolclass=NullPool,   # No connection pooling (better for serverless)
-)
+if DB_AVAILABLE:
+    if raw_url.startswith("postgresql://"):
+        DATABASE_URL = raw_url.replace("postgresql://", "postgresql+psycopg://", 1)
+    else:
+        DATABASE_URL = raw_url
+
+    engine = create_engine(
+        DATABASE_URL,
+        echo=settings.debug,
+        poolclass=NullPool,   # No connection pooling (better for serverless)
+    )
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+else:
+    import logging
+    logging.getLogger(__name__).warning("DATABASE_URL not set — database features disabled.")
+    engine = None
+    SessionLocal = None
 
 # Create session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -51,11 +60,15 @@ class ChatSession(Base):
 
 def init_db():
     """Initialize database tables."""
-    Base.metadata.create_all(bind=engine)
+    if engine:
+        Base.metadata.create_all(bind=engine)
 
 
 def get_db():
     """Dependency for getting database session."""
+    if not DB_AVAILABLE or SessionLocal is None:
+        yield None
+        return
     db = SessionLocal()
     try:
         yield db
