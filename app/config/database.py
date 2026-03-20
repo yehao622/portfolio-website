@@ -14,7 +14,7 @@ DB_AVAILABLE = bool(raw_url and raw_url.strip())
 
 if DB_AVAILABLE:
     if raw_url.startswith("postgresql://"):
-        DATABASE_URL = raw_url.replace("postgresql://", "postgresql+psycopg://", 1)
+        DATABASE_URL = raw_url.replace("postgresql://", "postgresql+psycopg2://", 1)
     else:
         DATABASE_URL = raw_url
 
@@ -29,9 +29,6 @@ else:
     logging.getLogger(__name__).warning("DATABASE_URL not set — database features disabled.")
     engine = None
     SessionLocal = None
-
-# Create session factory
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Create base class for models
 Base = declarative_base()
