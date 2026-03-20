@@ -22,6 +22,7 @@ if DB_AVAILABLE:
         DATABASE_URL,
         echo=settings.debug,
         poolclass=NullPool,   # No connection pooling (better for serverless)
+        connect_args={"sslmode": "require"}
     )
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 else:
