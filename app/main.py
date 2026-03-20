@@ -133,7 +133,7 @@ async def root():
 #         ai_service=ai_healthy,
 #         version=settings.app_version,
 #     )
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "HEAD"])
 async def health_check():
     return {
         "status": "healthy",
