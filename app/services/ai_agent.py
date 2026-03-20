@@ -7,6 +7,8 @@ from google.genai import types
 from app.config.settings import settings
 from app.services.document_loader import document_loader
 from app.models.schemas import ChatMessage
+import logging
+logger = logging.getLogger(__name__)
 
 
 class AIAgent:
@@ -77,6 +79,7 @@ KNOWLEDGE BASE:
             }
 
         except Exception as e:
+            logger.error(f"Gemini API error: {type(e).__name__}: {str(e)}", exc_info=True)
             return {
                 "response": "I'm having trouble right now. Please try again or contact Howard directly.",
                 "tokens_used": 0,

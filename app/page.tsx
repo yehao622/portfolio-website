@@ -16,24 +16,24 @@ export default function Home() {
         <div className="grid md:grid-cols-2 gap-8">
           <div>
             <p className="text-slate-700 mb-4">
-              Computer Engineering graduate student at University of Tennessee Knoxville, graduating May 2025.
-              Previous MS in Industrial Engineering with focus on optimization and mathematical modeling.
+              Results-driven DevOps/DevSecOps Engineer and MS Computer Engineering graduate (University of Tennessee Knoxville, 2025). 
+              I specialize in bridging software engineering and IT operations to deliver scalable, production-ready solutions.
             </p>
             <p className="text-slate-700 mb-4">
-              Passionate about building scalable cloud infrastructure, DevOps automation, and AI-powered systems.
-              Experience spans Python backend development, microservices architecture, AWS cloud services, and
-              high-performance computing simulation.
+              Passionate about building automated CI/CD pipelines, secure containerized microservices, and resilient cloud infrastructures. 
+              My recent experience spans infrastructure automation (Ansible, Terraform), application security (RBAC, JWT, rate limiting), 
+              and deploying full-stack, AI-integrated platforms using the Google Gemini API.
             </p>
           </div>
           <div>
             <h4 className="font-semibold text-slate-900 mb-3">Core Competencies</h4>
             <ul className="space-y-2 text-slate-700">
-              <li>• Cloud Infrastructure (AWS, Docker, PostgreSQL)</li>
-              <li>• Full Stack Development (Python, Node.js, React)</li>
-              <li>• AI/ML Integration (LangChain, OpenAI, RAG)</li>
-              <li>• DevOps & CI/CD Automation</li>
-              <li>• High-Performance Computing</li>
-              <li>• System Performance Optimization</li>
+              <li>• <strong>CI/CD & Automation:</strong> GitHub Actions, Jenkins, Ansible, Terraform</li>
+              <li>• <strong>Cloud & Containers:</strong> AWS, Docker, Kubernetes, Render, Vercel</li>
+              <li>• <strong>DevSecOps:</strong> RBAC, JWT, SSH Hardening, API Key Auth, Rate Limiting</li>
+              <li>• <strong>Full Stack Development:</strong> TypeScript, Node.js, React, C/C++</li>
+              <li>• <strong>AI Integration:</strong> Google Gemini API, PyTorch, Hugging Face</li>
+              <li>• <strong>HPC & Systems:</strong> Distributed Systems Performance Modeling</li>
             </ul>
           </div>
         </div>
