@@ -11,7 +11,7 @@ sqlalchemy>=2.0.35
 alembic>=1.13.1
 
 # AI - Google Gemini
-google-generativeai==0.8.3
+google-genai>=1.0.0
 
 # LangChain (optional, for future expansion)
 #langchain==0.3.7
