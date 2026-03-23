@@ -28,7 +28,7 @@ async def chat(request: ChatRequest):
         # Get AI response
         result = await ai_agent.chat(
             message=request.message,
-            conversation_history=request.conversation_history
+            history=request.conversation_history
         )
         
         if not result["success"]:
